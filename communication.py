@@ -39,7 +39,15 @@ class Communication(MQTTClient):
         topic = f"asset/configuration/requested"
         return self.publish(topic, json.dumps(self.config_payload))
 
-    def request_access(self):
+    def request_access(self, card_id):
+        if self.access_payload["card_id"] == card_id:
+            if self.access_payload["action"] == "login":
+                self.access_payload["action"] = "logout"
+            else:
+                self.access_payload["action"] = "login"
+        else:
+            self.access_payload["card_id"] = card_id
+            self.access_payload["action"] = "login"
         topic = f"asset/access/requested"
         return self.publish(topic, json.dumps(self.access_payload))
 
@@ -57,15 +65,7 @@ class Communication(MQTTClient):
 
                     if card_id:
                         print(card_id)
-                        if self.access_payload["card_id"] == card_id:
-                            if self.access_payload["action"] == "login":
-                                self.access_payload["action"] = "logout"
-                            else:
-                                self.access_payload["action"] = "login"
-                        else:
-                            self.access_payload["card_id"] = card_id
-                            self.access_payload["action"] = "login"
-                        self.request_access()
+                        self.request_access(card_id)
 
                     buffer = ""
                     lines = ""
