@@ -32,6 +32,7 @@ def main():
     comm = Communication(
         mqtt_client_id, serial_id=serial_id, rfid_port=rfid_port, baudrate=baudrate
     )
+    comm.tls_set("./certs/ca.crt")
 
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
