@@ -80,6 +80,17 @@ class WifiConfig:
             print(e)
             print("Error!!!!")
 
+    def check_connection(self):
+        try:
+            output = str(subprocess.check_output(["iwgetid"]))
+            if output:
+                ssid = output.split('"')[1]
+                return ssid
+            return None
+        except Exception as e:
+            print(e)
+            return None
+
     def is_connected(self, host="http://google.com"):
         try:
             urllib.request.urlopen(host)  # Python 3.x

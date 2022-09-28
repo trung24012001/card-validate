@@ -288,7 +288,7 @@
         <b>{{ssid}}</b>
         {% endif %}
       </div>
-      {% endfor %} {% if not connected %}
+      {% endfor %}
       <div id="loader" style="display: none"></div>
       <form method="post">
         <input
@@ -312,7 +312,6 @@
           Connect
         </button>
       </form>
-      {% endif %}
     </div>
     <script type="text/javascript">
       function loading() {
