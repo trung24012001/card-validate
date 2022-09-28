@@ -24,18 +24,23 @@ class WifiConfig:
     def create_connection(self, ssid, key):
         if platform.system() != "Linux":
             return False
-        if self.test_command(ssid, key) is True:
-
-            def run_thread():
-                time.sleep(5)
-                self.connect_wifi(ssid, key)
-
-            thread = threading.Thread(target=run_thread)
-            thread.start()
+        if self.connect_wifi(ssid, key):
             return True
         else:
             self.back_hostpot()
             return False
+        # if self.test_command(ssid, key) is True:
+
+        #     def run_thread():
+        #         time.sleep(5)
+        #         self.connect_wifi(ssid, key)
+
+        #     thread = threading.Thread(target=run_thread)
+        #     thread.start()
+        #     return True
+        # else:
+        #     self.back_hostpot()
+        #     return False
 
     def connect_wifi(self, ssid, key):
         try:
