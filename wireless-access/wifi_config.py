@@ -7,29 +7,30 @@ import time
 
 class WifiConfig:
     def __init__(self):
-        thread = threading.Thread(target=self.check_network)
-        thread.start()
+        pass
+
+    def start(self):
+        # thread = threading.Thread(target=self.check_network)
+        # thread.start()
+        pass
 
     def test_command(self, ssid, key):
-        try:
-            self.connect_wifi(ssid, key)
+        if self.connect_wifi(ssid, key):
             self.back_hostpot()
             return True
-        except Exception as e:
-            print(e)
+        else:
             return False
 
     def create_connection(self, ssid, key):
         if platform.system() != "Linux":
             return False
-        if self.test_command(ssid, key):
-            thread = threading.Thread(
-                target=self.connect_wifi,
-                args=(
-                    ssid,
-                    key,
-                ),
-            )
+        if self.test_command(ssid, key) is True:
+
+            def run_thread():
+                time.sleep(5)
+                self.connect_wifi(ssid, key)
+
+            thread = threading.Thread(target=run_thread)
             thread.start()
             return True
         else:
@@ -81,12 +82,25 @@ class WifiConfig:
         except:
             return False
 
+    def retry(self):
+        try:
+            command = "systemctl start NetworkManager && sleep 5"
+            subprocess.run(command, shell=True, check=True)
+            if self.is_connected():
+                return True
+            else:
+                self.back_hostpot()
+                return False
+        except Exception as e:
+            print(e)
+            self.back_hostpot()
+            return False
+
     def check_network(self):
         try:
             while True:
                 if not self.is_connected():
-                    self.back_hostpot()
-                    return
-                time.sleep(60)
+                    self.retry()
+                time.sleep(30)
         except:
             return

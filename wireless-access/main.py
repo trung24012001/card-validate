@@ -31,4 +31,5 @@ if __name__ == "__main__":
         sys.exit(
             "You need to have root privileges to run this script.\nPlease try again, this time using 'sudo'. Exiting."
         )
+    wifi.start()
     app.run(host="0.0.0.0", port=3000)
